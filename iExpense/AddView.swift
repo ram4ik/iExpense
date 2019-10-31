@@ -17,18 +17,27 @@ struct AddView: View {
     
     var body: some View {
         NavigationView {
-            TextField("Name", text: $name)
-            
-            Picker("Type", selection: $type) {
-                ForEach(Self.types, id: \.self) {
-                    Text($0)
+            VStack {
+                TextField("Name", text: $name)
+                
+                Picker("Type", selection: $type) {
+                    ForEach(Self.types, id: \.self) {
+                        Text($0)
+                    }
                 }
+                
+                TextField("Amount", text: $amount)
+                    .keyboardType(.numberPad)
             }
-            
-            TextField("Amount", text: $amount)
-                .keyboardType(.numberPad)
+            .navigationBarTitle("Add new expense")
+            .navigationBarItems(trailing:
+                Button("Save") {
+                    if let actualAmount = Int(self.amount) {
+                        let item = ExpenseItem(name: self.name, type: self.type, amount: actualAmount)
+                        self.expenses.items.append(item)
+                    }
+            })
         }
-    .navigationBarTitle("Add new expense")
     }
 }
 
